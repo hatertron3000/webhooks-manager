@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Webhooks Manager",
+  "name": "Webhooks Manager for BigCommerce",
   "icons": [
     {
       "src": "favicon.ico",

@@ -25,7 +25,7 @@ function App() {
   return <Router>
     <Switch>
       <Route path="/install" render={(props) =>
-        <Install message={lang.en.tos_agreement} {...props} />
+        <Install {...props} />
       } />
       <Route path="/load" render={(props) =>
         <Load {...props} />}
