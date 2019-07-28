@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Auth } from 'aws-amplify'
-import Notification from './common/Notification'
-import Button from './common/Button'
+import { Form, Container, Alert, Button, Card } from 'react-bootstrap'
+
 
 const lang =
 {
@@ -61,7 +61,6 @@ class Install extends Component {
         })
             .catch(err => console.log(err))
 
-        console.log("result: ", result)
         if (result)
             this.setState({
                 installation_complete: true,
@@ -82,52 +81,40 @@ class Install extends Component {
 
     render() {
         return (
-            <div>
-                <div className="row h-11">
-                    <div className="col-6">
-                        <div className="text-md" >
-                            {this.props.message}
-                        </div>
-                    </div>
-                </div>
-                <div className="row mb-7">
-                    <div className="col-12">
-                        {this.state.error
-                            ? <Notification type="warning" message={lang.en.installation_error} />
-                            : null}
-                        {this.state.installation_complete
-                            ? <Redirect to="/dashboard" />
-                            : null}
-                    </div>
-                </div>
-                <div className="row mb-10">
-                    <div className="col-3"></div>
-                    <div className="col-6">
-                        <div className={`form-check mb-3`}>
-                            <input
-                                type="checkbox"
-                                id="tosInput"
-                                className="form-check-input"
-                                onClick={this.onClickTOS} />
-                            <label
-                                htmlFor="tosInput"
-                                className="form-check-label text-muted align-top">
-                                You agree to the <a href="#">terms of service</a> of The App!
-                                    </label>
-                        </div>
-                        <div className="form-group">
-                            <Button
-                                disabled={this.state.disabled}
-                                onClick={this.onClickSignup}
-                                message={lang.en.signup}
-                                type="primary"
-                            />
-                        </div>
+            <Container>
+                <h1>
+                    {lang.en.thank_you}
+                </h1>
+                {this.state.error
+                    ? <Alert variant="warning">
+                        {lang.en.installation_error}
+                    </Alert>
+                    : null}
+                {this.state.installation_complete
+                    ? <Alert variant="success">
+                        <Alert.Heading>{lang.en.installation_success}</Alert.Heading>
+                        {lang.en.reopen_app}
+                    </Alert>
+                    : null}
+                <Form>
+                    {lang.en.tos_agreement}
+                    <Form.Group controlId="tosInpt">
+                        <Form.Check
+                            type="checkbox"
+                            id="tos">
+                            <Form.Check.Input type="checkbox" onClick={this.onClickTOS} />
+                            <Form.Check.Label>You agree to the <a href="#">terms of service</a> of the app.</Form.Check.Label>
+                        </Form.Check>
 
-                    </div>
-                    <div className='col-3'></div>
-                </div>
-            </div>
+                    </Form.Group>
+                    <Button
+                        disabled={this.state.disabled}
+                        onClick={this.onClickSignup}
+                        variant="primary">
+                        {lang.en.signup}
+                    </Button>
+                </Form>
+            </Container >
         )
     }
 }

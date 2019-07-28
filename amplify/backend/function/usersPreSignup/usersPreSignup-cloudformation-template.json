@@ -1,282 +1,306 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "Lambda resource stack creation using Amplify CLI",
-    "Parameters": {
-        "DOMAINBLACKLIST": {
-            "Type": "String",
-            "Default": ""
-        },
-        "DOMAINWHITELIST": {
-            "Type": "String",
-            "Default": ""
-        },
-        "modules": {
-            "Type": "String",
-            "Default": "",
-            "Description": "Comma-delimmited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
-        },
-        "resourceName": {
-            "Type": "String",
-            "Default": ""
-        },
-        "trigger": {
-            "Type": "String",
-            "Default": "true"
-        },
-        "functionName": {
-            "Type": "String",
-            "Default": ""
-        },
-        "roleName": {
-            "Type": "String",
-            "Default": ""
-        },
-        "parentResource": {
-            "Type": "String",
-            "Default": ""
-        },
-        "parentStack": {
-            "Type": "String",
-            "Default": ""
-        },
-        "env": {
-            "Type": "String"
-        },
-        "storagestoresName": {
-            "Type": "String",
-            "Default": "storagestoresName"
-        },
-        "storagestoresArn": {
-            "Type": "String",
-            "Default": "storagestoresArn"
-        }
-    },
-    "Conditions": {
-        "ShouldNotCreateEnvResources": {
-            "Fn::Equals": [
-                {
-                    "Ref": "env"
-                },
-                "NONE"
-            ]
-        }
-    },
-    "Resources": {
-        "LambdaFunction": {
-            "Type": "AWS::Lambda::Function",
-            "Metadata": {
-                "aws:asset:path": "./src",
-                "aws:asset:property": "Code"
-            },
-            "Properties": {
-                "Handler": "index.handler",
-                "FunctionName": {
-                    "Fn::If": [
-                        "ShouldNotCreateEnvResources",
-                        "usersPreSignup",
-                        {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    "usersPreSignup",
-                                    "-",
-                                    {
-                                        "Ref": "env"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                "Environment": {
-                    "Variables": {
-                        "ENV": {
-                            "Ref": "env"
-                        },
-                        "MODULES": {
-                            "Ref": "modules"
-                        },
-                        "REGION": {
-                            "Ref": "AWS::Region"
-                        },
-                        "DOMAINWHITELIST": {
-                            "Ref": "DOMAINWHITELIST"
-                        },
-                        "DOMAINBLACKLIST": {
-                            "Ref": "DOMAINBLACKLIST"
-                        },
-                        "STORAGE_STORES_NAME": {
-                            "Ref": "storagestoresName"
-                        },
-                        "STORAGE_STORES_ARN": {
-                            "Ref": "storagestoresArn"
-                        },
-                        "SECRETNAME": {
-                            "Ref": "SECRETNAME"
-                        },
-                        "SECRETKEY": {
-                            "Ref": "SECRETKEY"
-                        },
-                        "CLIENT_ID": {
-                            "Ref": "CLIENTID"
-                        },
-                        "REDIRECT_URI": {
-                            "Ref": "REDIRECTURI"
-                        }
-                    }
-                },
-                "Role": {
-                    "Fn::GetAtt": [
-                        "LambdaExecutionRole",
-                        "Arn"
-                    ]
-                },
-                "Runtime": "nodejs8.10",
-                "Timeout": "25"
-            }
-        },
-        "LambdaExecutionRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "RoleName": {
-                    "Fn::If": [
-                        "ShouldNotCreateEnvResources",
-                        "usersPreSignup",
-                        {
-                            "Fn::Join": [
-                                "",
-                                [
-                                    "usersPreSignup",
-                                    "-",
-                                    {
-                                        "Ref": "env"
-                                    }
-                                ]
-                            ]
-                        }
-                    ]
-                },
-                "AssumeRolePolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Principal": {
-                                "Service": [
-                                    "lambda.amazonaws.com"
-                                ]
-                            },
-                            "Action": [
-                                "sts:AssumeRole"
-                            ]
-                        }
-                    ]
-                }
-            }
-        },
-        "lambdaexecutionpolicy": {
-            "DependsOn": [
-                "LambdaExecutionRole"
-            ],
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "lambda-execution-policy",
-                "Roles": [
-                    {
-                        "Ref": "LambdaExecutionRole"
-                    }
-                ],
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Action": "secretsmanager:GetSecretValue",
-                            "Resource": {
-                                "Ref": "SECRETARN"
-                            }
-                        },
-                        {
-                            "Effect": "Allow",
-                            "Action": [
-                                "logs:CreateLogGroup",
-                                "logs:CreateLogStream",
-                                "logs:PutLogEvents"
-                            ],
-                            "Resource": {
-                                "Fn::Sub": [
-                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
-                                    {
-                                        "region": {
-                                            "Ref": "AWS::Region"
-                                        },
-                                        "account": {
-                                            "Ref": "AWS::AccountId"
-                                        },
-                                        "lambda": {
-                                            "Ref": "LambdaFunction"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            }
-        },
-        "AmplifyResourcesPolicy": {
-            "DependsOn": [
-                "LambdaExecutionRole"
-            ],
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "amplify-lambda-execution-policy",
-                "Roles": [
-                    {
-                        "Ref": "LambdaExecutionRole"
-                    }
-                ],
-                "PolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [
-                        {
-                            "Effect": "Allow",
-                            "Action": [
-                                "dynamodb:Put*",
-                                "dynamodb:Create*",
-                                "dynamodb:BatchWriteItem",
-                                "dynamodb:Update*",
-                                "dynamodb:RestoreTable*"
-                            ],
-                            "Resource": [
-                                {
-                                    "Ref": "storagestoresArn"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-        }
-    },
-    "Outputs": {
-        "Name": {
-            "Value": {
-                "Ref": "LambdaFunction"
-            }
-        },
-        "Arn": {
-            "Value": {
-                "Fn::GetAtt": [
-                    "LambdaFunction",
-                    "Arn"
-                ]
-            }
-        },
-        "Region": {
-            "Value": {
-                "Ref": "AWS::Region"
-            }
-        }
-    }
+	"AWSTemplateFormatVersion": "2010-09-09",
+	"Description": "Lambda resource stack creation using Amplify CLI",
+	"Parameters": {
+		"SECRETNAME": {
+			"Type": "String",
+			"Default": ""
+		},
+		"SECRETKEY": {
+			"Type": "String",
+			"Default": ""
+		},
+		"SECRETARN": {
+			"Type": "String",
+			"Default": ""
+		},
+		"REDIRECTURI": {
+			"Type": "String",
+			"Default": ""
+		},
+		"BCCLIENTID": {
+			"Type": "String",
+			"Default": ""
+		},
+		"DOMAINBLACKLIST": {
+			"Type": "String",
+			"Default": ""
+		},
+		"DOMAINWHITELIST": {
+			"Type": "String",
+			"Default": ""
+		},
+		"modules": {
+			"Type": "String",
+			"Default": "",
+			"Description": "Comma-delimmited list of modules to be executed by a lambda trigger. Sent to resource as an env variable."
+		},
+		"resourceName": {
+			"Type": "String",
+			"Default": ""
+		},
+		"trigger": {
+			"Type": "String",
+			"Default": "true"
+		},
+		"functionName": {
+			"Type": "String",
+			"Default": ""
+		},
+		"roleName": {
+			"Type": "String",
+			"Default": ""
+		},
+		"parentResource": {
+			"Type": "String",
+			"Default": ""
+		},
+		"parentStack": {
+			"Type": "String",
+			"Default": ""
+		},
+		"env": {
+			"Type": "String"
+		},
+		"storagestoresName": {
+			"Type": "String",
+			"Default": "storagestoresName"
+		},
+		"storagestoresArn": {
+			"Type": "String",
+			"Default": "storagestoresArn"
+		}
+	},
+	"Conditions": {
+		"ShouldNotCreateEnvResources": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"NONE"
+			]
+		}
+	},
+	"Resources": {
+		"LambdaFunction": {
+			"Type": "AWS::Lambda::Function",
+			"Metadata": {
+				"aws:asset:path": "./src",
+				"aws:asset:property": "Code"
+			},
+			"Properties": {
+				"Handler": "index.handler",
+				"FunctionName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"usersPreSignup",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"usersPreSignup",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"Environment": {
+					"Variables": {
+						"ENV": {
+							"Ref": "env"
+						},
+						"MODULES": {
+							"Ref": "modules"
+						},
+						"REGION": {
+							"Ref": "AWS::Region"
+						},
+						"DOMAINWHITELIST": {
+							"Ref": "DOMAINWHITELIST"
+						},
+						"DOMAINBLACKLIST": {
+							"Ref": "DOMAINBLACKLIST"
+						},
+						"STORAGE_STORES_NAME": {
+							"Ref": "storagestoresName"
+						},
+						"STORAGE_STORES_ARN": {
+							"Ref": "storagestoresArn"
+						},
+						"SECRETNAME": {
+							"Ref": "SECRETNAME"
+						},
+						"SECRETKEY": {
+							"Ref": "SECRETKEY"
+						},
+						"CLIENT_ID": {
+							"Ref": "BCCLIENTID"
+						},
+						"REDIRECT_URI": {
+							"Ref": "REDIRECTURI"
+						}
+					}
+				},
+				"Role": {
+					"Fn::GetAtt": [
+						"LambdaExecutionRole",
+						"Arn"
+					]
+				},
+				"Runtime": "nodejs8.10",
+				"Timeout": "25",
+				"Code": {
+					"S3Bucket": "webhooks-manager-staging-20190728120931-deployment",
+					"S3Key": "amplify-builds/usersPreSignup-42516d68414668627379-build.zip"
+				}
+			}
+		},
+		"LambdaExecutionRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"usersPreSignup",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"usersPreSignup",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": [
+									"lambda.amazonaws.com"
+								]
+							},
+							"Action": [
+								"sts:AssumeRole"
+							]
+						}
+					]
+				}
+			}
+		},
+		"lambdaexecutionpolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": "secretsmanager:GetSecretValue",
+							"Resource": {
+								"Ref": "SECRETARN"
+							}
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"logs:CreateLogGroup",
+								"logs:CreateLogStream",
+								"logs:PutLogEvents"
+							],
+							"Resource": {
+								"Fn::Sub": [
+									"arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+									{
+										"region": {
+											"Ref": "AWS::Region"
+										},
+										"account": {
+											"Ref": "AWS::AccountId"
+										},
+										"lambda": {
+											"Ref": "LambdaFunction"
+										}
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		},
+		"AmplifyResourcesPolicy": {
+			"DependsOn": [
+				"LambdaExecutionRole"
+			],
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "amplify-lambda-execution-policy",
+				"Roles": [
+					{
+						"Ref": "LambdaExecutionRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:Put*",
+								"dynamodb:Create*",
+								"dynamodb:BatchWriteItem",
+								"dynamodb:Update*",
+								"dynamodb:RestoreTable*"
+							],
+							"Resource": [
+								{
+									"Ref": "storagestoresArn"
+								}
+							]
+						}
+					]
+				}
+			}
+		}
+	},
+	"Outputs": {
+		"Name": {
+			"Value": {
+				"Ref": "LambdaFunction"
+			}
+		},
+		"Arn": {
+			"Value": {
+				"Fn::GetAtt": [
+					"LambdaFunction",
+					"Arn"
+				]
+			}
+		},
+		"Region": {
+			"Value": {
+				"Ref": "AWS::Region"
+			}
+		}
+	}
 }

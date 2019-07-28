@@ -23,5 +23,34 @@
                 "users": {}
             }
         }
+    },
+    "staging": {
+        "awscloudformation": {
+            "AuthRoleName": "webhooks-manager-staging-20190728120931-authRole",
+            "UnauthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-staging-20190728120931-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-staging-20190728120931-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "webhooks-manager-staging-20190728120931-deployment",
+            "UnauthRoleName": "webhooks-manager-staging-20190728120931-unauthRole",
+            "StackName": "webhooks-manager-staging-20190728120931",
+            "StackId": "arn:aws:cloudformation:us-east-1:152493541084:stack/webhooks-manager-staging-20190728120931/77fccce0-b15a-11e9-be62-120fc18a2440"
+        },
+        "categories": {
+            "auth": {
+                "users": {}
+            },
+            "function": {
+                "usersCreateAuthChallenge": {
+                    "CHALLENGEANSWER": "this answer does not matter because it will not be used"
+                },
+                "usersDefineAuthChallenge": {},
+                "usersPreSignup": {},
+                "usersVerifyAuthChallengeResponse": {},
+                "bcClient": {},
+                "webhooksApi": {},
+                "stores": {},
+                "users": {}
+            }
+        }
     }
 }

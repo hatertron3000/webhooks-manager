@@ -26,8 +26,6 @@ exports.handler = async (event, context, callback) => {
           context: event.request.validationData.context,
         })
 
-        console.log(body)
-
         const options = {
           hostname: 'login.bigcommerce.com',
           port: 443,
@@ -75,13 +73,13 @@ exports.handler = async (event, context, callback) => {
               dynamoDbClient.put(params, (err, data) => {
                 if (err) {
                   console.error(`Error adding store. Error: ${JSON.stringify(err, null, 2)}`)
-                  callback(new Error('Error during installation'), null)
+                  context.done(new Error('Error during installation'), null)
                 }
                 else {
                   console.log(`SUCCESS: Added user ${event.request.userAttributes.name}`)
                   // TODO: create random password before returning the event
                   event.response.autoConfirmUser = true
-                  callback(null, event)
+                  context.done(null, event)
                 }
               })
 
@@ -90,7 +88,7 @@ exports.handler = async (event, context, callback) => {
               console.error(`Error adding user: BC responded with ${res.statusCode}
               Response body:
               ${data} `)
-              callback(err, null)
+              context.done(err, null)
             }
           })
         })
