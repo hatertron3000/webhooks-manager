@@ -1,0 +1,5 @@
+{
+    "tableName": "stores",
+    "partitionKeyName": "hash",
+    "partitionKeyType": "S"
+}

@@ -1,0 +1,19 @@
+{
+    "permissions": {
+        "storage": {
+            "stores": [
+                "read"
+            ]
+        },
+        "function": {
+            "bcClient": [
+                "read"
+            ]
+        },
+        "auth": {
+            "users": [
+                "read"
+            ]
+        }
+    }
+}

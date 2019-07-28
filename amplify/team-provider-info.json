@@ -1,0 +1,27 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "webhooks-manager-dev-20190728092229-authRole",
+            "UnauthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-dev-20190728092229-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-dev-20190728092229-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "webhooks-manager-dev-20190728092229-deployment",
+            "UnauthRoleName": "webhooks-manager-dev-20190728092229-unauthRole",
+            "StackName": "webhooks-manager-dev-20190728092229",
+            "StackId": "arn:aws:cloudformation:us-east-1:152493541084:stack/webhooks-manager-dev-20190728092229/2219c470-b143-11e9-87e4-12b323895910"
+        },
+        "categories": {
+            "function": {
+                "usersCreateAuthChallenge": {
+                    "CHALLENGEANSWER": "This answer will not be used so it is arbitrary"
+                },
+                "usersDefineAuthChallenge": {},
+                "usersPreSignup": {},
+                "usersVerifyAuthChallengeResponse": {}
+            },
+            "auth": {
+                "users": {}
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "trigger": true,
+    "modules": [
+        "boilerplate-verify"
+    ],
+    "parentResource": "users",
+    "functionName": "usersVerifyAuthChallengeResponse",
+    "parentStack": "auth",
+    "triggerEnvs": "[]",
+    "triggerTemplate": "VerifyAuthChallengeResponse.json.ejs",
+    "roleName": "usersVerifyAuthChallengeResponse",
+    "skipEdit": true,
+    "resourceName": "usersVerifyAuthChallengeResponse"
+}

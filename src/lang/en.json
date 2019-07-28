@@ -1,0 +1,16 @@
+{
+    "auth_error": "Not signed in. Please reload the application",
+    "create_label": "Create",
+    "delete_label": "Delete",
+    "installation_complete": "Installation complete! If you are not redirected automatically in a few seconds, reload the app.",
+    "installation_error": "Error during installation, please try again",
+    "load_error": "Error loading the app, please try again",
+    "load_hooks_error": "Error retrieving hooks.",
+    "load_success": "Successfully signed in. Please wait while you are redirected.",
+    "pause_label": "|| Pause",
+    "signup": "Sign Up",
+    "start_label": ">> Start",
+    "tos_agreement": "Thank you for installing The App! Please agree to the terms of service to complete installation",
+    "view_label": "View",
+    "webhooks_header": "Current Webhooks"
+}

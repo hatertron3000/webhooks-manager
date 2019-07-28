@@ -1,0 +1,14 @@
+{
+    "trigger": true,
+    "modules": [
+        "boilerplate-create-challenge"
+    ],
+    "parentResource": "users",
+    "functionName": "usersCreateAuthChallenge",
+    "parentStack": "auth",
+    "triggerEnvs": "[]",
+    "triggerTemplate": "CreateAuthChallenge.json.ejs",
+    "roleName": "usersCreateAuthChallenge",
+    "skipEdit": true,
+    "resourceName": "usersCreateAuthChallenge"
+}

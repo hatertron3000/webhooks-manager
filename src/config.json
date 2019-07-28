@@ -1,0 +1,104 @@
+{
+    "hooks": [
+        {
+            "type": "Order",
+            "scopes": [
+                "store/order/*",
+                "store/order/created",
+                "store/order/archived",
+                "store/order/statusUpdated",
+                "store/order/message/created"
+            ]
+        },
+        {
+            "type": "Product",
+            "scopes": [
+                "store/product/*",
+                "store/product/deleted",
+                "store/product/created",
+                "store/product/updated",
+                "store/product/inventory/updated",
+                "store/product/inventory/order/updated"
+            ]
+        },
+        {
+            "type": "Category",
+            "scopes": [
+                "store/category/*",
+                "store/category/created",
+                "store/category/updated",
+                "store/category/deleted"
+            ]
+        },
+        {
+            "type": "SKU",
+            "scopes": [
+                "store/sku/*",
+                "store/sku/created",
+                "store/sku/updated",
+                "store/sku/deleted",
+                "store/sku/inventory/updated",
+                "store/sku/inventory/order/updated"
+            ]
+        },
+        {
+            "type": "Customer",
+            "scopes": [
+                "store/customer/*",
+                "store/customer/created",
+                "store/customer/updated",
+                "store/customer/deleted",
+                "store/customer/address/created",
+                "store/customer/address/updated",
+                "store/customer/address/deleted",
+                "store/customer/payment/instrument/default/updated"
+            ]
+        },
+        {
+            "type": "Store",
+            "scopes": [
+                "store/app/uninstalled",
+                "store/information/updated"
+            ]
+        },
+        {
+            "type": "Cart",
+            "scopes": [
+                "store/cart/*",
+                "store/cart/created",
+                "store/cart/updated",
+                "store/cart/deleted",
+                "store/cart/couponApplied",
+                "store/cart/abandoned",
+                "store/cart/converted"
+            ]
+        },
+        {
+            "type": "Cart Line Item",
+            "scopes": [
+                "store/cart/lineItem/*",
+                "store/cart/lineItem/created",
+                "store/cart/lineItem/updated",
+                "store/cart/lineItem/deleted"
+            ]
+        },
+        {
+            "type": "Shipment",
+            "scopes": [
+                "store/shipment/*",
+                "store/shipment/created",
+                "store/shipment/updated",
+                "store/shipment/deleted"
+            ]
+        },
+        {
+            "type": "Subscriber",
+            "scopes": [
+                "store/subscriber/*",
+                "store/subscriber/created",
+                "store/subscriber/updated",
+                "store/subscriber/deleted"
+            ]
+        }
+    ]
+}
