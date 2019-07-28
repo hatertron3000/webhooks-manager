@@ -1,0 +1,7 @@
+{
+    "BCCLIENTID": {
+        "Type": "String",
+        "Default": "<YOUR-BC-CLIENT-ID>",
+        "Description": "The client ID provided by BC when you registered your application."
+    }
+}

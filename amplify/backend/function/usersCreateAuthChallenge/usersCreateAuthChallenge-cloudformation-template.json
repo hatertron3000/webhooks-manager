@@ -2,21 +2,6 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Lambda resource stack creation using Amplify CLI",
     "Parameters": {
-        "SECRETNAME": {
-            "Type": "String",
-            "Default": "<YOUR-SECRET-NAME>",
-            "Description": "The secret name used to reference the secret key-value pair that contains your BC client secret (example: bcSecret-dev)"
-        },
-        "SECRETKEY": {
-            "Type": "String",
-            "Default": "<YOUR-SECRET-KEY>",
-            "Description": "The key for the key-value pari that contains your BC secret (example: client_secret)"
-        },
-        "SECRETARN": {
-            "Type": "String",
-            "Default": "<YOUR-SECRET-ARN>",
-            "Description": "The Amazon Resource Name for your Secret in Secrets Manager (example format: arn:aws:secretsmanager:<region>:<account id>:secret:<secret name>) "
-        },
         "CHALLENGEANSWER": {
             "Type": "String",
             "Default": ""
