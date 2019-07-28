@@ -8,17 +8,17 @@ exports.handler = async (event, context, callback) => {
     redirect_uri: process.env.REDIRECT_URI
   }
   try {
-    secretsManagerClient.getSecretValue({ SecretId: process.env.SECRET }, (err, data) => {
+    secretsManagerClient.getSecretValue({ SecretId: process.env.SECRETNAME }, (err, data) => {
       if (err) console.log(err)
       else {
         const secret = data.SecretString
         const secretJson = JSON.parse(secret)
-        const bc_client_secret = secretJson.client_secret
+        const client_secret = secretJson[process.env.SECRETKEY]
 
         // send the POST request 
         const body = JSON.stringify({
           client_id: config.client_id,
-          client_secret: bc_client_secret,
+          client_secret,
           code: event.request.validationData.code,
           scope: event.request.validationData.scope,
           grant_type: 'authorization_code',

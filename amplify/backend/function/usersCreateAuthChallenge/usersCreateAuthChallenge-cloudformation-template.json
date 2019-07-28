@@ -2,9 +2,24 @@
     "AWSTemplateFormatVersion": "2010-09-09",
     "Description": "Lambda resource stack creation using Amplify CLI",
     "Parameters": {
+        "SECRETNAME": {
+            "Type": "String",
+            "Default": "<YOUR-SECRET-NAME>",
+            "Description": "The secret name used to reference the secret key-value pair that contains your BC client secret (example: bcSecret-dev)"
+        },
+        "SECRETKEY": {
+            "Type": "String",
+            "Default": "<YOUR-SECRET-KEY>",
+            "Description": "The key for the key-value pari that contains your BC secret (example: client_secret)"
+        },
+        "SECRETARN": {
+            "Type": "String",
+            "Default": "<YOUR-SECRET-ARN>",
+            "Description": "The Amazon Resource Name for your Secret in Secrets Manager (example format: arn:aws:secretsmanager:<region>:<account id>:secret:<secret name>) "
+        },
         "CHALLENGEANSWER": {
-          "Type": "String",
-          "Default": ""
+            "Type": "String",
+            "Default": ""
         },
         "modules": {
             "Type": "String",
@@ -32,13 +47,12 @@
             "Default": ""
         },
         "parentStack": {
-			"Type": "String",
-			"Default": ""
-		},
+            "Type": "String",
+            "Default": ""
+        },
         "env": {
             "Type": "String"
         }
-    
     },
     "Conditions": {
         "ShouldNotCreateEnvResources": {
@@ -52,62 +66,18 @@
     },
     "Resources": {
         "LambdaFunction": {
-          "Type": "AWS::Lambda::Function",
-          "Metadata": {
-            "aws:asset:path": "./src",
-            "aws:asset:property": "Code"
-          },
-          "Properties": {
-            "Handler": "index.handler",
-            "FunctionName": {
-                "Fn::If": [
-                    "ShouldNotCreateEnvResources",
-                    "usersCreateAuthChallenge", 
-                    {
-
-                        "Fn::Join": [
-                            "",
-                            [
-                                "usersCreateAuthChallenge",
-                                "-",
-                                {
-                                    "Ref": "env"
-                                }
-                            ]
-                        ]
-                    }      
-                ]
+            "Type": "AWS::Lambda::Function",
+            "Metadata": {
+                "aws:asset:path": "./src",
+                "aws:asset:property": "Code"
             },
-            "Environment": {
-                "Variables" : {
-                    "ENV": {
-                        "Ref": "env"
-                    },
-                    "MODULES": {
-                        "Ref": "modules"
-                    },
-                    "REGION": { 
-                        "Ref": "AWS::Region"
-                    },
-                    "CHALLENGEANSWER": {
-                        "Ref": "CHALLENGEANSWER"
-                    }
-                }
-            },
-            "Role": { "Fn::GetAtt" : ["LambdaExecutionRole", "Arn"] },
-            "Runtime": "nodejs8.10",
-            "Timeout": "25"
-          }
-        },
-        "LambdaExecutionRole": {
-            "Type": "AWS::IAM::Role",
             "Properties": {
-                "RoleName": {
+                "Handler": "index.handler",
+                "FunctionName": {
                     "Fn::If": [
                         "ShouldNotCreateEnvResources",
-                        "usersCreateAuthChallenge", 
+                        "usersCreateAuthChallenge",
                         {
-
                             "Fn::Join": [
                                 "",
                                 [
@@ -118,7 +88,60 @@
                                     }
                                 ]
                             ]
-                        } 
+                        }
+                    ]
+                },
+                "Environment": {
+                    "Variables": {
+                        "ENV": {
+                            "Ref": "env"
+                        },
+                        "MODULES": {
+                            "Ref": "modules"
+                        },
+                        "REGION": {
+                            "Ref": "AWS::Region"
+                        },
+                        "CHALLENGEANSWER": {
+                            "Ref": "CHALLENGEANSWER"
+                        },
+                        "SECRETNAME": {
+                            "Ref": "SECRETNAME"
+                        },
+                        "SECRETKEY": {
+                            "Ref": "SECRETKEY"
+                        }
+                    }
+                },
+                "Role": {
+                    "Fn::GetAtt": [
+                        "LambdaExecutionRole",
+                        "Arn"
+                    ]
+                },
+                "Runtime": "nodejs8.10",
+                "Timeout": "25"
+            }
+        },
+        "LambdaExecutionRole": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+                "RoleName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        "usersCreateAuthChallenge",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "usersCreateAuthChallenge",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
                     ]
                 },
                 "AssumeRolePolicyDocument": {
@@ -138,22 +161,52 @@
                     ]
                 }
             }
-        }
-        ,"lambdaexecutionpolicy": {
-            "DependsOn": ["LambdaExecutionRole"],
+        },
+        "lambdaexecutionpolicy": {
+            "DependsOn": [
+                "LambdaExecutionRole"
+            ],
             "Type": "AWS::IAM::Policy",
             "Properties": {
                 "PolicyName": "lambda-execution-policy",
-                "Roles": [{ "Ref": "LambdaExecutionRole" }],
+                "Roles": [
+                    {
+                        "Ref": "LambdaExecutionRole"
+                    }
+                ],
                 "PolicyDocument": {
                     "Version": "2012-10-17",
                     "Statement": [
                         {
                             "Effect": "Allow",
-                            "Action":["logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"],
-                            "Resource": { "Fn::Sub" : [ "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*", { "region": {"Ref": "AWS::Region"},  "account": {"Ref": "AWS::AccountId"}, "lambda": {"Ref": "LambdaFunction"}} ]}
+                            "Action": "secretsmanager:GetSecretValue",
+                            "Resource": {
+                                "Ref": "SECRETARN"
+                            }
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+                                    {
+                                        "region": {
+                                            "Ref": "AWS::Region"
+                                        },
+                                        "account": {
+                                            "Ref": "AWS::AccountId"
+                                        },
+                                        "lambda": {
+                                            "Ref": "LambdaFunction"
+                                        }
+                                    }
+                                ]
+                            }
                         }
                     ]
                 }
@@ -167,7 +220,12 @@
             }
         },
         "Arn": {
-            "Value": {"Fn::GetAtt": ["LambdaFunction", "Arn"]}
+            "Value": {
+                "Fn::GetAtt": [
+                    "LambdaFunction",
+                    "Arn"
+                ]
+            }
         },
         "Region": {
             "Value": {
