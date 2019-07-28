@@ -61,7 +61,6 @@ class Install extends Component {
         })
             .catch(err => console.log(err))
 
-        console.log("result: ", result)
         if (result)
             this.setState({
                 installation_complete: true,
@@ -96,7 +95,7 @@ class Install extends Component {
                             ? <Notification type="warning" message={lang.en.installation_error} />
                             : null}
                         {this.state.installation_complete
-                            ? <Redirect to="/dashboard" />
+                            ? <Notification type="success" message={lang.en.installation_success} />
                             : null}
                     </div>
                 </div>

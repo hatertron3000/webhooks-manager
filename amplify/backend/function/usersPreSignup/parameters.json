@@ -1,29 +1,9 @@
 {
-    "SECRETNAME": {
-        "Type": "String",
-        "Default": "<YOUR-SECRET-NAME>",
-        "Description": "The secret name used to reference the secret key-value pair that contains your BC client secret (example: bcSecret-dev)"
-    },
-    "SECRETKEY": {
-        "Type": "String",
-        "Default": "<YOUR-SECRET-KEY>",
-        "Description": "The key for the key-value pari that contains your BC secret (example: client_secret)"
-    },
-    "SECRETARN": {
-        "Type": "String",
-        "Default": "<YOUR-SECRET-ARN>",
-        "Description": "The Amazon Resource Name for your Secret in Secrets Manager (example format: arn:aws:secretsmanager:<region>:<account id>:secret:<secret name>) "
-    },
-    "REDIRECTURI": {
-        "Type": "String",
-        "Default": "<YOUR-APP-INSTALL-URI>",
-        "Description": "The Redirect URI that matches your app's Install URI to be used in the POST to login.bigcommerce.com/oauth2/token"
-    },
-    "BCCLIENTID": {
-        "Type": "String",
-        "Default": "<YOUR-BC-CLIENT-ID>",
-        "Description": "The client ID provided by BC when you registered your application."
-    },
-    "modules": "custom",
+    "SECRETNAME": "bcSecret",
+    "SECRETKEY": "client_secret",
+    "SECRETARN": "arn:aws:secretsmanager:us-east-1:152493541084:secret:bcSecret-H3gW5z",
+    "REDIRECTURI": "https://127.0.0.1:5005/install",
+    "BCCLIENTID": "onb7j1cysnb9yv6ufabgqsbzgleut6o",
+    "modules": "",
     "resourceName": "usersPreSignup"
 }
