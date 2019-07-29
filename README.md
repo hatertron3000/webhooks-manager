@@ -7,7 +7,7 @@ This application manages the following AWS resources with Amplify CLI:
  - Lambda Functions
  - Cognito User and Identity Pools
  - DynamoDB
- - S3 (optional for hosting)
+ - S3
  - Cloudfront (optional for hosting)
 
 **A note about security**
