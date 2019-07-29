@@ -20,11 +20,11 @@ If you intend to use this application as a starting point for a production serve
 
 # Installation
 
-This application utilizes [AWS Amplify CLI](https://github.com/aws-amplify/amplify-cli) and [AWS Amplify JS](https://github.com/aws-amplify/amplify-js) to deploy a serverless backend to AWS , with a React front end you can run locally, or later build and publish to an S3 bucket behind Cloudfront.
+This application utilizes [AWS Amplify CLI](https://github.com/aws-amplify/amplify-cli) and [AWS Amplify JS](https://github.com/aws-amplify/amplify-js) to deploy a serverless backend to AWS , with a React front end that you can run locally, or later build and publish to an S3 bucket behind Cloudfront.
 
 This example uses [Requestbin](https://requestbin.com/) to receive, respond to, and record webhook events sent by BigCommerce. You could add any custom URIs you would like to act as the webhook listening endpoint and event monitoring UI, but that is outside the scope of this procedure.
 
-Since this application stores the BigCommerce Client Secret in AWS Secrets Manager. Amplify CLI does not yet support Secrets Manager, so these steps will be performed in the AWS Console, and environment variables will be manually added as parameters for Cloudformation templates.
+Since this application stores the BigCommerce Client Secret in AWS Secrets Manager, and Amplify CLI does not yet support Secrets Manager, so these steps will be performed in the AWS Console, and environment variables will be manually added as parameters for Cloudformation templates.
 
 ## Prerequisites
 ### Environment
