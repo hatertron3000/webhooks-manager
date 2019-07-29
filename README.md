@@ -121,20 +121,23 @@ If you would like to run the React app on a specific port, create *webhooks-mana
 
 #### React app
 Edit *webhooks-manager/.env* and add the following values:
-|Key|Value  |
+
+|Key|Value|
 |--|--|
 |REACT_APP_WEBHOOKSENDPOINT  | Your Requestbin endpoint |
 |REACT_APP_REQUESTBIN|Your Requestbin monitoring UI URL|
 
 #### bcClient Lambda CloudFormation
 Edit *webhooks-manager/amplify/backend/function/bcClient/parameters.json* 
-|Key|Value  |
+
+|Key|Value|
 |--|--|
 |BCCLIENTID|Your BigCommerce Client ID|
 
 #### usersCreateAuthChallenge Lambda CloudFormation
 Edit *webhooks-manager/amplify/backend/function/usersCreateAuthChallenge* 
-|Key|Value  |
+
+|Key|Value|
 |--|--|
 |SECRETNAME|Your Secret's name in Secrets Manager (example: *bcSecret)*|
 |SECRETKEY|They key from the key value pair in Secrets Manager (example: *client_secret)* |
@@ -142,7 +145,8 @@ Edit *webhooks-manager/amplify/backend/function/usersCreateAuthChallenge*
 
 #### usersPreSignup Lambda Cloudformation
 Edit *webhooks-manager/amplify/backend/function/usersPreSignup/parameters.json* 
-|Key|Value  |
+
+|Key|Value|
 |--|--|
 |SECRETNAME|Your Secret's name in Secrets Manager (example: *bcSecret)*|
 |SECRETKEY|They key from the key value pair in Secrets Manager (example: *client_secret)* |
