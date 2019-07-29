@@ -53,7 +53,9 @@ This example will walk you through registering a [personal app](https://develope
 3. Click the Create an App button
 4. Enter your App Name, then click Create
 5. Navigate to the Technical tab then enter the Auth Callback URL and Load Callback URL
-6. Take note of your Auth Callback and Load Callback URLs
+6. Take note of your Auth Callback URL to be used as the REDIRECTURI environment variable in a CloudFormation template.
+7. Save the app
+8. Click the View Client ID link to view your Client ID and Client Secret. Take note of those values for use in Lambda environment variables and storage in Secrets Manager respectively.
 
 For more information on BigCommerce apps, check out the [BigCommerce documentation](https://developer.bigcommerce.com/api-docs/getting-started).
 
