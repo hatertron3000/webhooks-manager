@@ -224,14 +224,23 @@ TODO
 ### Events Dashboard
 TODO
 
+# Troubleshooting
+*I get an error about a CloudFormation template after I try to `amplify push`*
+Check the environment variables in the `parameters.json` files, and ensure the files are valid JSON.
+
+*I can't get past the terms of service page. I keep getting an error saying installation failed, and there is an error from Cognito in my browser's JS console saying the PreSignup Lambda didn't give a valid response.*
+Check the logs for the PreSignup Lambda in Cloudwatch. Logging may indicate a problem with an environment variable for the PreSignup Lambda like the Redirect URI, or Client Secret.
+
+*When I click the Events link in the navigation, the app loads another iframe of itself*
+Check that your Requestbin URL is a valid URL in *webhooks-manager/.env* file.
 
 # Known Issues
 ## Uninstall
 ### Problem
-There is no process to disable the Cognito user when an admin uninstalls the app from the store. This means before reinstalling the app, the store must be manually removed from the table in DynamoDB. 
+There is no process implemented to disable the Cognito user when an admin uninstalls the app from the store. This means before reinstalling the app, the user must be manually removed from the Cognito user pool.
 
 ### Solution
-An Uninstall Callback URI can be provided to BigCommerce. When an admin uninstalls the app from the store, the Uninstall Callback URI can invoke a Lambda function to validate the Uninstall request, and update the stores table in DynamoDB as needed.
+An Uninstall Callback URI can be provided to BigCommerce. When an admin uninstalls the app from the store, the Uninstall Callback URI can invoke a Lambda function to validate the Uninstall request, remove the user from the Cognito user pool, and update the stores table in DynamoDB as needed.
 
 ## App must be relaunched after installation
 ### Problem
