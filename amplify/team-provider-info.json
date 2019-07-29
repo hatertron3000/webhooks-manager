@@ -17,7 +17,11 @@
                 },
                 "usersDefineAuthChallenge": {},
                 "usersPreSignup": {},
-                "usersVerifyAuthChallengeResponse": {}
+                "usersVerifyAuthChallengeResponse": {},
+                "bcClient": {},
+                "webhooksApi": {},
+                "stores": {},
+                "users": {}
             },
             "auth": {
                 "users": {}
@@ -42,6 +46,35 @@
             "function": {
                 "usersCreateAuthChallenge": {
                     "CHALLENGEANSWER": "this answer does not matter because it will not be used"
+                },
+                "usersDefineAuthChallenge": {},
+                "usersPreSignup": {},
+                "usersVerifyAuthChallengeResponse": {},
+                "bcClient": {},
+                "webhooksApi": {},
+                "stores": {},
+                "users": {}
+            }
+        }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "webhooks-manager-prod-20190728191826-authRole",
+            "UnauthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-prod-20190728191826-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::152493541084:role/webhooks-manager-prod-20190728191826-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "webhooks-manager-prod-20190728191826-deployment",
+            "UnauthRoleName": "webhooks-manager-prod-20190728191826-unauthRole",
+            "StackName": "webhooks-manager-prod-20190728191826",
+            "StackId": "arn:aws:cloudformation:us-east-1:152493541084:stack/webhooks-manager-prod-20190728191826/62c1f580-b196-11e9-9621-0a129e2750f4"
+        },
+        "categories": {
+            "auth": {
+                "users": {}
+            },
+            "function": {
+                "usersCreateAuthChallenge": {
+                    "CHALLENGEANSWER": "this challenge answer is arbitrary"
                 },
                 "usersDefineAuthChallenge": {},
                 "usersPreSignup": {},

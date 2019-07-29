@@ -5,11 +5,7 @@ var region = process.env.REGION
 var storageStoresName = process.env.STORAGE_STORES_NAME
 var storageStoresArn = process.env.STORAGE_STORES_ARN
 
-Amplify Params - DO NOT EDIT *//*
-  this file will loop through all js modules which are uploaded to the lambda resource,
-  provided that the file names (without extension) are included in the "MODULES" env variable.
-  "MODULES" is a comma-delimmited string.
-*/
+Amplify Params - DO NOT EDIT */
 
 exports.handler = (event, context, callback) => {
   console.log({ message: 'Received signup request' })

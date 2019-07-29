@@ -1,7 +1,7 @@
 {
-    "SECRETNAME": "<YOUR SECRET NAME IN SECRETS MANAGER>",
-    "SECRETKEY": "<YOUR SECRET KEY NAME FOR THE BC CLIENT SECRET VALUE>",
-    "SECRETARN": "<YOUR SECRET AMAZON RESOURCE NAME>",
+    "SECRETNAME": "bcSecret",
+    "SECRETKEY": "client_secret",
+    "SECRETARN": "arn:aws:secretsmanager:us-east-1:152493541084:secret:bcSecret-H3gW5z",
     "modules": "",
     "resourceName": "usersCreateAuthChallenge"
 }

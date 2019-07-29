@@ -69,7 +69,7 @@
 				"Runtime": "nodejs10.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "webhooks-manager-staging-20190728120931-deployment",
+					"S3Bucket": "webhooks-manager-prod-20190728191826-deployment",
 					"S3Key": "amplify-builds/bcClient-4b48397a4d2b7370756e-build.zip"
 				}
 			}

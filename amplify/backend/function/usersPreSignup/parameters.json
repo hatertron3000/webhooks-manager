@@ -1,9 +1,9 @@
 {
-    "SECRETNAME": "<YOUR SECRET NAME IN SECRETS MANAGER>",
-    "SECRETKEY": "<YOUR SECRET KEY NAME FOR THE BC CLIENT SECRET VALUE>",
-    "SECRETARN": "<YOUR SECRET AMAZON RESOURCE NAME>",
-    "REDIRECTURI": "<YOUR APP REDIRECT/INSTALL URI",
-    "BCCLIENTID": "<YOUR BIGCOMMERCE CLIENT ID>",
+    "SECRETNAME": "bcSecret",
+    "SECRETKEY": "client_secret",
+    "SECRETARN": "arn:aws:secretsmanager:us-east-1:152493541084:secret:bcSecret-H3gW5z",
+    "REDIRECTURI": "https://127.0.0.1:5005/install",
+    "BCCLIENTID": "onb7j1cysnb9yv6ufabgqsbzgleut6o",
     "modules": "",
     "resourceName": "usersPreSignup"
 }

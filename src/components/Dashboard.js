@@ -86,8 +86,6 @@ class Dashboard extends Component {
                                 <pre style={{ color: "#00FF00" }}>{this.state.aside.content}</pre>
                             </Card.Body>
                         </Card>}
-
-
                 </Col>
             </Row>
         </Container>
