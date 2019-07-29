@@ -11,11 +11,12 @@ This application manages the following AWS resources with Amplify CLI:
  - Cloudfront (optional for hosting)
 
 **A note about security**
+
 If you intend to use this application as a starting point for a production serverless BigCommerce app, consider additional security measure, such as:
 
  - Always use [AWS IAM best practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
- - Additional encryption, or an alternate API key storage service, for the API tokens this app stores in DynamoDB using KMS, or another service to prevent exposure through the DynamoDB console.
- - Defining the webhook destination in a Lambda function, rather than the React application. The intent is to allow a developers using a private app to supply their own webhook destination during webhook creation. But relying on user input to define a webhook destination should be avoided in a public app.
+ - Adding additional encryption, or an alternate API key storage service, for the API tokens this app stores in DynamoDB. Consider using KMS, or another service to prevent exposure through the DynamoDB console.
+ - Defining the webhook destination in a Lambda function, rather than the React application. The intent of defining the destination in React is to allow a developers using a private app to add a UI to supply their own webhook destination during webhook creation. But relying on user input to define a webhook destination should be avoided in a public app.
  - Adding Logout links, and faster token expiration (default is 1 day).
 
 # Installation
