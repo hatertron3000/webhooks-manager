@@ -10,7 +10,7 @@ const AWS = require('aws-sdk')
 const https = require('https')
 const secretsManagerClient = new AWS.SecretsManager()
 
-exports.handler = (event, context, callback) => {
+exports.handler = async (event, context, callback) => {
   console.log({ message: 'Received signup request' })
   return new Promise((resolve, reject) => {
     try {
@@ -84,13 +84,13 @@ exports.handler = (event, context, callback) => {
                 dynamoDbClient.put(params, (err, data) => {
                   if (err) {
                     console.error(`Error adding store. Error: ${JSON.stringify(err, null, 2)}`)
-                    reject(new Error('Error during installation'), null)
+                    reject(new Error('Error during installation'))
                   }
                   else {
                     console.log(`SUCCESS: Added user ${event.request.userAttributes.name}`)
                     // TODO: create random password before returning the event
                     event.response.autoConfirmUser = true
-                    reject(null, event)
+                    resolve(event)
                   }
                 })
 
@@ -99,14 +99,14 @@ exports.handler = (event, context, callback) => {
                 console.error(`Error adding user: BC responded with ${res.statusCode}
                     Response body:
                     ${data} `)
-                reject(err, null)
+                reject(err)
               }
             })
           })
 
           req.on('error', err => {
             console.error(err)
-            reject(err, null)
+            reject(err)
           })
 
           req.write(body)
@@ -116,7 +116,7 @@ exports.handler = (event, context, callback) => {
     }
     catch (err) {
       console.error(err)
-      reject(err, null)
+      reject(err)
     }
   })
 }
