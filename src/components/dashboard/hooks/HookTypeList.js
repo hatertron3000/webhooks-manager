@@ -34,7 +34,7 @@ class HookTypeList extends Component {
                     eventKey={`eventslist-${this.props.hookType.type}`}>
                     <Col xs={11} className="d-flex justify-content-start"><span className="h4 text-dark">{this.props.hookType.type}</span></Col>
                     <Col xs={1}>
-                        <span class="badge badge-pill badge-primary">
+                        <span className="badge badge-pill badge-primary">
                             {this.props.hookType.scopes.filter(event => currentEvents.includes(event)).length}
                         </span>
                     </Col>
