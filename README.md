@@ -21,11 +21,11 @@ If you intend to use this application as a starting point for a production serve
 
 # Installation
 
-This application utilizes [AWS Amplify CLI](https://github.com/aws-amplify/amplify-cli) and [AWS Amplify JS](https://github.com/aws-amplify/amplify-js) to deploy a serverless backend to AWS , with a React front end that you can run locally, or later build and publish to an S3 bucket behind Cloudfront.
+This application utilizes [AWS Amplify CLI](https://github.com/aws-amplify/amplify-cli) and [AWS Amplify JS](https://github.com/aws-amplify/amplify-js) to deploy a serverless backend to AWS, with a React front end that you can run locally, or later build and publish to an S3 bucket behind Cloudfront.
 
 This example uses [Requestbin](https://requestbin.com/) to receive, respond to, and record webhook events sent by BigCommerce. You could add any custom URIs you would like to act as the webhook listening endpoint and event monitoring UI, but that is outside the scope of this procedure.
 
-Since this application stores the BigCommerce Client Secret in AWS Secrets Manager, and Amplify CLI does not yet support Secrets Manager, so these steps will be performed in the AWS Console, and environment variables will be manually added as parameters for Cloudformation templates.
+Since this application stores the BigCommerce Client Secret in AWS Secrets Manager, and Amplify CLI does not yet support Secrets Manager, some of these steps will be performed in the AWS Console, and environment variables will be manually added as parameters for Cloudformation templates.
 
 ## Prerequisites
 ### Environment
@@ -73,7 +73,7 @@ For more information on BigCommerce apps, check out the [BigCommerce documentati
 #### Account
 If you don't already have an AWS account, sign up for a free tier account here: [https://aws.amazon.com/free](https://aws.amazon.com/free)
 
-*While this utility was developed and tested within the limits of an AWS Free Tier account, you are responsible for any charges incurred by using the services created by Amplify*
+*While this utility was developed and tested within the limits of an AWS Free Tier account, you are responsible for any charges incurred by using the resources created by Amplify*
 
 Always follow [AWS IAM Best Practices](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#create-iam-users), such as operating from an IAM user rather than your root account.
 #### Amplify CLI
@@ -138,7 +138,7 @@ Edit *webhooks-manager/amplify/backend/function/bcClient/parameters.json*
 |BCCLIENTID|Your BigCommerce Client ID|
 
 #### usersCreateAuthChallenge Lambda CloudFormation
-Edit *webhooks-manager/amplify/backend/function/usersCreateAuthChallenge* 
+Edit *webhooks-manager/amplify/backend/function/usersCreateAuthChallenge/parameters.json* 
 
 |Key|Value|
 |--|--|
@@ -209,6 +209,8 @@ By using `amplify serve` instead of `npm run start` to start your development se
  3. Click *Install* for your application
  4. Follow the prompts to complete installation
  5. After a successful installation, you will be prompted to agree to terms of service, and sign up.
+ 
+ *If after clicking* Install *your browser fails to connect to the React app, try to navigate directly to your Auth Callback URL. You may need to create an exception for SSL certificate in your browser*
 
 ### Signup Screen
 
@@ -225,6 +227,91 @@ TODO
 
 ### Events Dashboard
 TODO
+
+# Deployment
+
+## Add S3 hosting with CloudFront
+Amplify provides two types of hosting:
+- development, which provides an S3 bucket accessible with HTTP
+- production, which provides an S3 bucket behind a CloudFront CDN accessible with HTTPS
+
+Since the Auth Callback and Load Callback URIs must be served over HTTPS, building and hosting the React app in the cloud requires production hosting. To add production hosting run
+
+`amplify hosting add`
+
+Complete the prompts to select production hosting.
+```
+amplify hosting add
+? Select the environment setup: PROD (S3 with CloudFront using HTTPS)
+? hosting bucket name webhooks-manager-hosting
+? index doc for the website index.html
+? error doc for the website index.html
+
+You can now publish your app using the following command:
+Command: amplify publish
+```
+
+When you are ready to build and deploy the app, run
+
+`amplify publish`
+
+Answer Y when prompted to create resources in the cloud:
+```
+Current Environment: prod
+
+| Category | Resource name                    | Operation | Provider plugin   |
+| -------- | -------------------------------- | --------- | ----------------- |
+| Hosting  | S3AndCloudFront                  | Create    | awscloudformation |
+| Storage  | stores                           | No Change | awscloudformation |
+| Function | usersCreateAuthChallenge         | No Change | awscloudformation |
+| Function | usersDefineAuthChallenge         | No Change | awscloudformation |
+| Function | usersPreSignup                   | No Change | awscloudformation |
+| Function | usersVerifyAuthChallengeResponse | No Change | awscloudformation |
+| Function | bcClient                         | No Change | awscloudformation |
+| Function | webhooksApi                      | No Change | awscloudformation |
+| Auth     | users                            | No Change | awscloudformation |
+| Api      | webhooksApi                      | No Change | awscloudformation |
+? Are you sure you want to continue? Yes
+⠋ Updating resources in the cloud. This may take a few minutes...
+```
+
+Once the deployment completes, the CLI will provide your CloudFront URL. Example:
+```
+✔ Uploaded files successfully.
+Your app is published successfully.
+https://<unique-string>.cloudfront.net
+```
+
+## Update Auth Callback, Load Callback, and Redirect URIs
+
+### Update the app registration
+1. Navigate to https://devtools.bigcommerce.com
+2. Click the *Edit App* button
+3. Click the *Technical* tab
+4. Update the domain for your Auth Callback and Load Callback URLs to use your CloudFront URL
+5. Click the *Update & Close* button
+
+### Update the preSignUp Lambda function
+Edit *webhooks-manager/amplify/backend/function/usersPreSignup/parameters.json*
+
+Replace the value for REDIRECTURI with your app's new Auth Callback URI.
+
+### Push your updated backend
+From *webhooks-manager*, run
+
+`amplify push`
+
+Answer Y when prompted to update resources in the cloud.
+
+# What's next?
+
+- Use `amplify function create` to build an [Uninstall Callback](https://developer.bigcommerce.com/api-docs/getting-started/building-apps-bigcommerce/building-apps) Lambda function.
+- Try using [Amplify Console](https://aws.amazon.com/amplify/console/) to manage your environments and deployments.
+- [Set up a Custom Domain](https://docs.aws.amazon.com/amplify/latest/userguide/custom-domains.html) using Amplify and Route 53
+- Consider adding a form to gather additional information on the Sign Up page, or trigger an email confirmation to the user.
+- Enable multi-user support in BigCommerce, and update the Verify Auth Challenge Lambda function to update the store's `users` list in the `stores` table in DynamoDB
+- Build your own webhooks listening endpoint, and event storage to replace Requestbin
+- Trigger additional Lambda functions to perform tasks in repsonse to webhook events
 
 # Troubleshooting
 **I get an error about a CloudFormation template after I try to `amplify push`**
