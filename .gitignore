@@ -32,7 +32,16 @@ dist/
 node_modules/
 aws-exports.js
 awsconfiguration.json
+
+
+#environment variables
+#### remove if environment should be committed ####
 amplify/team-provider-info.json
+amplify/backend/function/bcClient/parameters.json.ignore
+amplify/backend/function/uninstallCallback/parameters.json.ignore
+amplify/backend/function/usersCreateAuthChallenge/parameters.json.ignore
+amplify/backend/function/usersPreSignup/parameters.json.ignore
+
 
 #jshint
 .jshintrc

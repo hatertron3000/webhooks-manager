@@ -69,6 +69,28 @@
 					]
 				}
 			]
+		},
+		"uninstallCallback": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "stores",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				},
+				{
+					"category": "auth",
+					"resourceName": "users",
+					"attributes": [
+						"UserPoolId"
+					]
+				}
+			]
 		}
 	},
 	"auth": {
@@ -123,6 +145,20 @@
 				{
 					"category": "function",
 					"resourceName": "webhooksApi",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
+		},
+		"uninstall": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "uninstallCallback",
 					"attributes": [
 						"Name",
 						"Arn"

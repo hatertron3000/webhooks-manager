@@ -1,0 +1,34 @@
+{
+    "paths": [
+        {
+            "name": "/uninstall",
+            "lambdaFunction": "uninstallCallback",
+            "privacy": {
+                "open": true
+            }
+        }
+    ],
+    "resourceName": "uninstall",
+    "apiName": "uninstall",
+    "functionArns": [
+        {
+            "lambdaFunction": "uninstallCallback"
+        }
+    ],
+    "privacy": {
+        "auth": 0,
+        "unauth": 0,
+        "authRoleName": "webhooks-manager-staging-20190730191235-authRole",
+        "unAuthRoleName": "webhooks-manager-staging-20190730191235-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "uninstallCallback",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
