@@ -94,7 +94,7 @@
 				"Runtime": "nodejs8.10",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "webhooks-manager-prod-20190728191826-deployment",
+					"S3Bucket": "webhooks-manager-staging-20190730191235-deployment",
 					"S3Key": "amplify-builds/usersDefineAuthChallenge-2f337645556a4c636952-build.zip"
 				}
 			}

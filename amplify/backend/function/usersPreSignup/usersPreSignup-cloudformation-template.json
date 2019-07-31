@@ -154,8 +154,8 @@
 				"Runtime": "nodejs8.10",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "webhooks-manager-prod-20190728191826-deployment",
-					"S3Key": "amplify-builds/usersPreSignup-6b735078725837564457-build.zip"
+					"S3Bucket": "webhooks-manager-staging-20190730191235-deployment",
+					"S3Key": "amplify-builds/usersPreSignup-30734f79703967753667-build.zip"
 				}
 			}
 		},
